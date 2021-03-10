@@ -20,11 +20,40 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+
 //Обозреватель
 class Watcher implements Observer {
     public String LogFilePath = "DefaultLogFile.txt";
     public void update(Observable obs, Object arg) {
+        try {
+            if (arg instanceof String) {
+                this.LogFilePath = (String) arg;
+                File LogFile = new File(LogFilePath);
+                if (!LogFile.exists()) {
+                    LogFile.createNewFile();
+                }
+            }
+            else {
+                File LogFile = new File(LogFilePath);
+                FileWriter LogFileWriter = new FileWriter(LogFile.getAbsoluteFile(), true);
 
+                switch ((int) arg) {
+                    case 2:
+                        LogFileWriter.write(LocalDateTime.now() + " Обращение к массиву\n");
+                        break;
+                    case 3:
+                        LogFileWriter.write(LocalDateTime.now() + " Равенство объекта некоторому значению\n");
+                        break;
+                    case 5:
+                        LogFileWriter.write(LocalDateTime.now() + " Изменение переменной\n");
+                        break;
+                }
+
+                LogFileWriter.close();
+            }
+        } catch (Exception ex) {
+            System.out.println("Error! Message: " + ex);
+        }
     }
 }
 
@@ -33,11 +62,7 @@ class MyClassLab3 extends Observable {
     public String SourceFilePath = "DefaultSourceFile.txt", LogFilePath = "DefaultLogFile.txt";
     public ArrayList<String> Even = new ArrayList<String>(); //четный
     public ArrayList<String> Uneven = new ArrayList<String>(); //нечетный
-
-    public void notifyObs() {
-        setChanged();
-        notifyObservers();
-    }
+    public final int N = -10;
 
     public void ConsoleReadPath() {
         Scanner ConsoleReadPath = new Scanner(System.in);
@@ -57,6 +82,8 @@ class MyClassLab3 extends Observable {
         }
 
         ConsoleReadPath.close();
+        setChanged();
+        notifyObservers(LogFilePath);
     }
 
     public void ReadLinesFromSourceFile() {
@@ -70,11 +97,20 @@ class MyClassLab3 extends Observable {
                 String x;
                 while ((x = SourceFileReader.readLine()) != null) {
                     if (Integer.parseInt(x) < 0) {
+                        if (Integer.parseInt(x) == N) {
+                            setChanged();
+                            notifyObservers(3);
+                            x = "-1000";
+                            setChanged();
+                            notifyObservers(5);
+                        }
                         if (Integer.parseInt(x) % 2 == 0) {
                             Even.add(x);
                         } else {
                             Uneven.add(x);
                         }
+                        setChanged();
+                        notifyObservers(2);
                     }
                 }
                 SourceFileReader.close();
@@ -101,6 +137,8 @@ class MyClassLab3 extends Observable {
                         LogFileWriter.write(LocalDateTime.now() + " Больше «нечётных и отрицательных»\n");
                     }
                 }
+                setChanged();
+                notifyObservers(2);
                 LogFileWriter.close();
             }
         } catch (Exception ex) {
@@ -118,7 +156,5 @@ public class Main {
         MyClass.ConsoleReadPath();
         MyClass.ReadLinesFromSourceFile();
         MyClass.WriteResultToLogFile();
-
-        MyClass.notifyObs();
     }
 }
