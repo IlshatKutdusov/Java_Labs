@@ -1,11 +1,11 @@
 package Lab2;
 /*
 Вариант:
-7. 000010110
+ - 7. 000010110
 Проверить:
-2. В строке отсутствует какой-то символ
-3. Больше, чем некоторое число
-5. Меньше, чем некоторое число
+ - 2. В строке отсутствует какой-то символ
+ - 3. Больше, чем некоторое число
+ - 5. Меньше, чем некоторое число
  */
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ interface Options {
     final String Exception2 = "В строке отсутствует какой-то символ (" + SourceChar + ")";
     final int MinNumber = 10;
     final String Exception3 = "Больше, чем некоторое число";
-    final int MaxNumber = -10;
+    final int MaxNumber = 10;
     final String Exception5 = "Меньше, чем некоторое число";
 }
 
@@ -89,8 +89,7 @@ public class Main {
             MyClass MyClass1 = new MyClass();
             MyClass1.ConsoleReadArgument(args);
             MyClass1.ListChecking();
-        }
-        catch (MyExceptions ex) {
+        } catch (MyExceptions ex) {
             System.out.println("Error! Message: " + ex);
         }
 

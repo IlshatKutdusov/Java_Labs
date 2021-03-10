@@ -1,11 +1,18 @@
 package Lab1;
 
+/*
+Вариант 7:
+ - 7. Дана последовательность целых чисел. Программа должна сообщить каких чисел
+встретилось больше: «чётных и отрицательных», «нечётных и отрицательных», либо их
+поровну
+ */
+
 import java.util.ArrayList;
 
 public class Main {
     public static void main (String[] args){
-        ArrayList Even = new ArrayList(); //четный
-        ArrayList Uneven = new ArrayList(); //нечетный
+        ArrayList<String> Even = new ArrayList<String>(); //четный
+        ArrayList<String> Uneven = new ArrayList<String>(); //нечетный
 
         for (String x : args) {
             if (Integer.parseInt(x) < 0) {
